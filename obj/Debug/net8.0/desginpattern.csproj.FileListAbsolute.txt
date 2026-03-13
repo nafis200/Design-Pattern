@@ -1,0 +1,15 @@
+/media/nafis-ahamed/OS/CPS/desginpattern/bin/Debug/net8.0/desginpattern
+/media/nafis-ahamed/OS/CPS/desginpattern/bin/Debug/net8.0/desginpattern.deps.json
+/media/nafis-ahamed/OS/CPS/desginpattern/bin/Debug/net8.0/desginpattern.runtimeconfig.json
+/media/nafis-ahamed/OS/CPS/desginpattern/bin/Debug/net8.0/desginpattern.dll
+/media/nafis-ahamed/OS/CPS/desginpattern/bin/Debug/net8.0/desginpattern.pdb
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/desginpattern.GeneratedMSBuildEditorConfig.editorconfig
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/desginpattern.AssemblyInfoInputs.cache
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/desginpattern.AssemblyInfo.cs
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/desginpattern.csproj.CoreCompileInputs.cache
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/desginpattern.sourcelink.json
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/desginpattern.dll
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/refint/desginpattern.dll
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/desginpattern.pdb
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/desginpattern.genruntimeconfig.cache
+/media/nafis-ahamed/OS/CPS/desginpattern/obj/Debug/net8.0/ref/desginpattern.dll
