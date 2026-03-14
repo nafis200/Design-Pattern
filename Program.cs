@@ -3,22 +3,38 @@ using System;
 
 public class Logger
 {
+    private static Logger _instance = null;
 
-    public Logger()
+    private Logger()
     {
-        Console.WriteLine("Logger create ");
+        Console.WriteLine("Logger create");
     }
-    public void log(string message)
+
+    public static Logger GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = new Logger();
+        }
+
+        return _instance;
+    }
+
+    public void Log(string message)
     {
         Console.WriteLine(message);
     }
 }
+
 class Program
 {
     public static void Main()
     {
-      Logger logger = new Logger();
+        Logger logger1 = Logger.GetInstance();
+        logger1.Log("First message");
 
-      logger.log("heelo world");   
+        Logger logger2 = Logger.GetInstance();
+        logger2.Log("Second message");
+
     }
 }
