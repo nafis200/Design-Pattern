@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("desginpattern")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c56212d73ba83ef697ee2573efc402556d337dcf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e457f29e1962b34c71f551846ec29cf0182ebe7a")]
 [assembly: System.Reflection.AssemblyProductAttribute("desginpattern")]
 [assembly: System.Reflection.AssemblyTitleAttribute("desginpattern")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

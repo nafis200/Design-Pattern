@@ -1,40 +1,117 @@
-﻿
-using System;
+﻿using System;
 
-public class Logger
+public interface Isend
 {
-    private static Logger _instance = null;
+    void sendMessage();
+}
 
-    private Logger()
+public interface Ilog
+{
+    void log();
+}
+
+public interface Isave
+{
+    void Save();
+}
+
+public class EmailNotify : Isend, Isave, Ilog
+{
+    public string Email { get; set; }
+
+    public void sendMessage() => Console.WriteLine($"Sending Email to {Email}");
+    public void log() => Console.WriteLine("Log Email");
+    public void Save() => Console.WriteLine("Email Saved");
+}
+
+public class SmsNotify : Isend, Isave, Ilog
+{
+    public string MobileNumber { get; set; }
+
+    public void sendMessage() => Console.WriteLine($"Sending SMS to {MobileNumber}");
+    public void log() => Console.WriteLine("Log SMS");
+    public void Save() => Console.WriteLine("SMS Saved");
+}
+
+public class PushNotify : Isend, Ilog
+{
+    public string Token { get; set; }
+
+    public void sendMessage() => Console.WriteLine($"Sending Push Notification to {Token}");
+    public void log() => Console.WriteLine("Log Push");
+}
+
+public class NotifyContext
+{
+    public Isend Send { get; set; }
+    public Ilog log { get; set; }
+    public Isave save { get; set; }
+
+    public NotifyContext(Isend send, Ilog log, Isave save)
     {
-        Console.WriteLine("Logger create");
+        Send = send;
+        this.log = log;
+        this.save = save;
     }
 
-    public static Logger GetInstance()
+    public void Process()
     {
-        if (_instance == null)
-        {
-            _instance = new Logger();
-        }
-
-        return _instance;
+        Send.sendMessage();
+        log.log();
+        save?.Save();
     }
+}
 
-    public void Log(string message)
+public interface INotificationContextCreator
+{
+    NotifyContext Create();
+}
+
+public class EmailNotificationContextCreator : INotificationContextCreator
+{
+    public NotifyContext Create()
     {
-        Console.WriteLine(message);
+        var email = new EmailNotify { Email = "n@gmail.com" };
+        return new NotifyContext(email, email, email);
+    }
+}
+
+public class SmsNotificationContextCreator : INotificationContextCreator
+{
+    public NotifyContext Create()
+    {
+        var sms = new SmsNotify { MobileNumber = "12345" };
+        return new NotifyContext(sms, sms, sms);
+    }
+}
+
+public class PushNotificationContextCreator : INotificationContextCreator
+{
+    public NotifyContext Create()
+    {
+        var push = new PushNotify { Token = "abc" };
+        return new NotifyContext(push, push, null); 
     }
 }
 
 class Program
 {
-    public static void Main()
+    static void Main(string[] args)
     {
-        Logger logger1 = Logger.GetInstance();
-        logger1.Log("First message");
+        INotificationContextCreator emailCreator = new EmailNotificationContextCreator();
+        NotifyContext emailContext = emailCreator.Create();
+        emailContext.Process();
 
-        Logger logger2 = Logger.GetInstance();
-        logger2.Log("Second message");
+        Console.WriteLine();
 
+        INotificationContextCreator smsCreator = new SmsNotificationContextCreator();
+        NotifyContext smsContext = smsCreator.Create();
+        smsContext.Process();
+
+        Console.WriteLine();
+
+        INotificationContextCreator pushCreator = new PushNotificationContextCreator();
+        NotifyContext pushContext = pushCreator.Create();
+        pushContext.Process();
     }
 }
