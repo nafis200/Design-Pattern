@@ -1,175 +1,69 @@
-﻿using System;
+﻿
 
-public interface Isend
+public class HttpRequest
 {
-    void sendMessage();
-}
+    public string Method;
+    public string url;
+    public IDictionary<string,string> Headers;
+    public string Body;
 
-public interface Ilog
-{
-    void log();
-}
-
-public interface Isave
-{
-    void Save();
-}
-
-public class EmailNotify : Isend, Isave, Ilog
-{
-    public string Email { get; set; }
-
-    public void sendMessage() => Console.WriteLine($"Sending Email to {Email}");
-    public void log() => Console.WriteLine("Log Email");
-    public void Save() => Console.WriteLine("Email Saved");
-}
-
-public class SmsNotify : Isend, Isave, Ilog
-{
-    public string MobileNumber { get; set; }
-
-    public void sendMessage() => Console.WriteLine($"Sending SMS to {MobileNumber}");
-    public void log() => Console.WriteLine("Log SMS");
-    public void Save() => Console.WriteLine("SMS Saved");
-}
-
-public class PushNotify : Isend, Ilog
-{
-    public string Token { get; set; }
-
-    public void sendMessage() => Console.WriteLine($"Sending Push Notification to {Token}");
-    public void log() => Console.WriteLine("Log Push");
-}
-
-public class NotifyContext
-{
-    public Isend Send { get; set; }
-    public Ilog log { get; set; }
-    public Isave save { get; set; }
-
-    public NotifyContext(Isend send, Ilog log, Isave save)
+    public HttpRequest(string Method, string url, IDictionary<string,string> Headers, string Body)
     {
-        Send = send;
-        this.log = log;
-        this.save = save;
+        this.Method = Method;
+        this.url = url;
+        this.Headers = Headers;
+        this.Body = Body;
     }
 
-    public void Process()
+    public void Send()
     {
-        Send.sendMessage();
-        log.log();
-        save?.Save();
+        Console.WriteLine(Method);
+        Console.WriteLine(url);
+        Console.WriteLine(Body);
+
+        foreach(var item in Headers)
+        {
+            Console.WriteLine(item.Key + " : " + item.Value);
+        } 
     }
 }
 
-public interface INotifacationFactory
+public class HttpRequestBuilder
 {
-    public Isend CreateSend();
-    public Ilog CreateLog();
-    public Isave CreateSave();
-}
+    private HttpRequest request = new HttpRequest(
+        "",
+        "",
+        new Dictionary<string,string>(),
+        ""
+    );
 
-public class EmailNotificationFactory : INotifacationFactory
-{
-    public Isend CreateSend()
+    public HttpRequestBuilder SetMethod(string method)
     {
-        return new EmailNotify();
+        request.Method = method;
+        return this;
     }
 
-    public Ilog CreateLog()
+    public HttpRequestBuilder SetUrl(string url)
     {
-        return new EmailNotify();
+        request.url = url;
+        return this;
     }
 
-    public Isave CreateSave()
+    public HttpRequestBuilder AddHeader(string key, string value)
     {
-        return new EmailNotify();
-    }
-}
-
-
-public class SmsNotificationFactory : INotifacationFactory
-{
-    public Isend CreateSend()
-    {
-        return new SmsNotify();
+        request.Headers.Add(key, value);
+        return this;
     }
 
-    public Ilog CreateLog()
+    public HttpRequestBuilder SetBody(string body)
     {
-        return new SmsNotify();
+        request.Body = body;
+        return this;
     }
 
-    public Isave CreateSave()
+    public HttpRequest Build()
     {
-        return new SmsNotify();
-    }
-}
-
-
-public class PushNotificationFactory : INotifacationFactory
-{
-    public Isend CreateSend()
-    {
-        return new PushNotify();
-    }
-
-    public Ilog CreateLog()
-    {
-        return new PushNotify();
-    }
-
-    public Isave CreateSave()
-    {
-        return null;
-    }
-}
-
-
-
-public interface INotificationContextCreator
-{
-    NotifyContext Create();
-}
-
-public class EmailNotificationContextCreator : INotificationContextCreator
-{
-    INotifacationFactory factory = new EmailNotificationFactory();
-
-    public NotifyContext Create()
-    {
-        return new NotifyContext(
-            factory.CreateSend(),
-            factory.CreateLog(),
-            factory.CreateSave()
-        );
-    }
-}
-
-public class SmsNotificationContextCreator : INotificationContextCreator
-{
-    INotifacationFactory factory = new SmsNotificationFactory();
-    public NotifyContext Create()
-    {
-        return new NotifyContext(
-            factory.CreateSend(),
-            factory.CreateLog(),
-            factory.CreateSave()
-        );
-    }
-}
-
-public class PushNotificationContextCreator : INotificationContextCreator
-{
-    
-    INotifacationFactory factory = new PushNotificationFactory();
-    public NotifyContext Create()
-    {
-        return new NotifyContext(
-            factory.CreateSend(),
-            factory.CreateLog(),
-            factory.CreateSave()
-        );
+        return request;
     }
 }
 
@@ -177,20 +71,14 @@ class Program
 {
     static void Main(string[] args)
     {
-        INotificationContextCreator emailCreator = new EmailNotificationContextCreator();
-        NotifyContext emailContext = emailCreator.Create();
-        emailContext.Process();
+        HttpRequest request = new HttpRequestBuilder()
+            .SetMethod("POST")
+            .SetUrl("/api/user")
+            .AddHeader("Content-Type", "application/json")
+            .AddHeader("Authorization", "Bearer 12345")
+            .SetBody("{ \"name\": \"Nafis\" }")
+            .Build();
 
-        Console.WriteLine();
-
-        INotificationContextCreator smsCreator = new SmsNotificationContextCreator();
-        NotifyContext smsContext = smsCreator.Create();
-        smsContext.Process();
-
-        Console.WriteLine();
-
-        INotificationContextCreator pushCreator = new PushNotificationContextCreator();
-        NotifyContext pushContext = pushCreator.Create();
-        pushContext.Process();
+        request.Send();
     }
 }
