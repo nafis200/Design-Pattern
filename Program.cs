@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// Deep copy
+// shallow Copy
+
 public class Product
 {
     public string Id { get; set; }
@@ -16,8 +19,16 @@ public class Product
     public string UpdatedBy { get; set; }
     public IList<string> Tags { get; set; }
 
-    public Product Clone()
+    public Product Clones()
     {
+        // Deep Copy
+
+        // Product copy = (Product)this.MemberwiseClone();
+
+        // copy.Tags = new List<string>(this.Tags);
+      
+        // Shallow Copy
+
         return (Product)this.MemberwiseClone();
     }
 }
@@ -36,7 +47,7 @@ public class ProductService : IproductService
 
         foreach (Product product in products)
         {
-            Product productCopy = product.Clone();
+            Product productCopy = product.Clones();
 
             productCopy.Id = Guid.NewGuid().ToString();
 
